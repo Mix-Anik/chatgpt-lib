@@ -1,4 +1,8 @@
 # chatgpt-lib
+![npm](https://img.shields.io/npm/v/chatgpt-lib)
+![npm](https://img.shields.io/npm/dw/chatgpt-lib)
+![GitHub](https://img.shields.io/github/license/Mix-Anik/chatgpt-lib)
+
 Simple javascript wrapper for ChatGPT's unofficial web API
 
 ## Installation
