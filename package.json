@@ -1,5 +1,5 @@
 {
-  "name": "chat-gpt",
+  "name": "chatgpt-lib",
   "version": "0.1.0",
   "description": "Simple javascript wrapper for ChatGPT's unofficial web API",
   "main": "index.js",
@@ -12,9 +12,9 @@
   "author": "Mix-Anik",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mix-Anik/chat-gpt.git"
+    "url": "git+https://github.com/Mix-Anik/chatgpt-lib.git"
   },
-  "homepage": "https://github.com/Mix-Anik/chat-gpt",
+  "homepage": "https://github.com/Mix-Anik/chatgpt-lib",
   "license": "MIT",
   "dependencies": {
     "axios": "^1.2.0",

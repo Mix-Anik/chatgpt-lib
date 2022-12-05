@@ -1,8 +1,8 @@
-# chat-gpt
+# chatgpt-lib
 Simple javascript wrapper for ChatGPT's unofficial web API
 
 ## Installation
-`npm i chat-gpt`
+`npm i chatgpt-lib`
 
 ## Setup & Usage
 1. You will need session token for this to work.  
@@ -19,7 +19,7 @@ To obtain it:
 ```
 3. Here's minimal code for prompting a question to chatGPT
 ```js
-const cgpt = require('chat-gpt');
+const cgpt = require('chatgpt-lib');
 const config = require('./config');
 
 const chatbot = new cgpt.ChatGPT(config);
