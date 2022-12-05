@@ -1,0 +1,23 @@
+{
+  "name": "chat-gpt",
+  "version": "0.1.0",
+  "description": "Simple javascript wrapper for ChatGPT's unofficial web API",
+  "main": "index.js",
+  "keywords": [
+    "ChatGPT",
+    "OpenAI",
+    "AI",
+    "NLP"
+  ],
+  "author": "Mix-Anik",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mix-Anik/chat-gpt.git"
+  },
+  "homepage": "https://github.com/Mix-Anik/chat-gpt",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.2.0",
+    "uuid": "^9.0.0"
+  }
+}
