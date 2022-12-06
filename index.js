@@ -1,6 +1,7 @@
 const uuid = require('uuid');
 const axios = require('axios');
 
+const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
 
 class ChatGPT {
     constructor(config, conversationId = null) {
@@ -33,6 +34,7 @@ class ChatGPT {
                 parent_message_id: this.parentId,
             },
             headers: {
+                'User-Agent': USER_AGENT,
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${this.config.Authorization}`,
                 'Content-Type': 'application/json',
@@ -68,6 +70,7 @@ class ChatGPT {
             method: 'GET',
             url: 'https://chat.openai.com/api/auth/session',
             headers: {
+                'User-Agent': USER_AGENT,
                 'Cookie': `__Secure-next-auth.session-token=${this.config.SessionToken}`
             }
         });
