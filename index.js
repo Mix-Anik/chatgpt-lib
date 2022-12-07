@@ -1,7 +1,17 @@
 const uuid = require('uuid');
 const axios = require('axios');
+const cliPrompt = require('prompt-sync')();
 
 const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
+
+function isValidJson(text) {
+    try{
+        JSON.parse(text);
+        return true;
+    } catch {
+        return false;
+    }
+}
 
 class ChatGPT {
     constructor(config, conversationId = null) {
@@ -35,23 +45,40 @@ class ChatGPT {
             },
             headers: {
                 'User-Agent': USER_AGENT,
-                'Accept': 'application/json',
+                'Accept': 'text/event-stream;application/json',
                 'Authorization': `Bearer ${this.config.Authorization}`,
                 'Content-Type': 'application/json',
             }
+        }).catch(err => {
+            if (err.response.status.toString()[0] === '5')
+                return 'ChatGPT failed to respond due to internal error. Please try again.';
+
+            console.log(`ERROR: ChatGPT failed to respond due to :${err}`);
+            return 'ChatGPT failed to respond. Possibly because "chatgpt-lib" flow broke, please report to the developer.';
         });
 
+        response = response.data.split('\n\n');
+        response = response[response.length-3].slice(6);
+
         try {
-            const parts = response.data.split('\n');
-            response = JSON.parse(parts[parts.length-5].split('data: ')[1]);
+            if (isValidJson(response))
+                response = JSON.parse(response);
+            else
+                return 'ChatGPT failed to respond. Please try again.';
+
+            this.parentId = response.message.id;
+            this.conversationId = response.conversation_id;
+
+            return response.message.content.parts[0];
         } catch (err) {
-            throw new Error(`Could not find or parse actual response text due to: ${err}`);
+            console.log(`ERROR: Could not find or parse actual response text due to: ${err}`);
+            return 'ChatGPT failed to respond. Please try again.';
         }
+    }
 
-        this.parentId = response.message.id;
-        this.conversationId = response.conversation_id;
-
-        return response.message.content.parts[0];
+    resetThread() {
+        this.conversationId = null;
+        this.parentId = uuid.v4();
     }
 
     validateToken(token) {
@@ -83,6 +110,23 @@ class ChatGPT {
             this.config.Authorization = response.data.accessToken;
         } catch (err) {
             throw new Error(`Failed to fetch new session tokens due to: ${err}`);
+        }
+    }
+
+    async initCliConversation() {
+        console.log('You can start prompting ChatGPT now.\nIf you want to reset thread type "\\r". To exit type "\\q" or press ctrl+c.');
+        while (true) {
+            const input = cliPrompt('You: ');
+
+            if (['\\q', null].includes(input)) break;
+            if (input === '\\r') {
+                this.resetThread();
+                console.log('Thread was reset.');
+                continue;
+            }
+
+            const answer = await this.ask(input);
+            console.log(`ChatGPT: ${answer}`);
         }
     }
 }

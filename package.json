@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-lib",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Simple javascript wrapper for ChatGPT's unofficial web API",
   "main": "index.js",
   "keywords": [
@@ -18,6 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.2.0",
+    "prompt-sync": "^4.2.0",
     "uuid": "^9.0.0"
   }
 }

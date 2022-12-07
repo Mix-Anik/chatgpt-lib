@@ -26,11 +26,36 @@ To obtain it:
 const cgpt = require('chatgpt-lib');
 const config = require('./config');
 
+...
+
 const chatbot = new cgpt.ChatGPT(config);
-chatbot.ask("Hey, how are you doing today?").then(answer => {
-    console.log(answer);
-})
+let answer = await chatbot.ask("Hey, how are you doing today?");
+console.log(answer);
+answer = await chatbot.ask("Can you explain to me how quantum superposition works?");
+console.log(answer);
 ```
+You can also start conversation just like on the ChatGPT's web page, but in CLI mode:
+```js
+// index.js contents
+
+const cgpt = require('chatgpt-lib');
+const config = require('./config');
+
+const chatbot = new cgpt.ChatGPT(config);
+chatbot.initCliConversation();
+```
+Then just run in like `node index.js`
+
+![image](https://user-images.githubusercontent.com/36076591/206302699-9215f570-ca60-4dc9-b89a-6874b87caa74.png)
+
+## Docs
+| Class   |         Method          |                      Params | Description                      |
+|---------|:-----------------------:|----------------------------:|----------------------------------|
+| ChatGPT |      `ask(prompt)`      |     _prompt_ : text to send | Prompts ChatGPT with given text  |
+| ChatGPT |     `resetThread()`     |                           - | Resets conversation with ChatGPT |
+| ChatGPT | `validateToken(token)`  | _token_ : token to validate | Checks if jwt has expired        |
+| ChatGPT |      `getTokens()`      |                           - | Fetches auth and session tokens  |
+| ChatGPT | `initCliConversation()` |                           - | Starts conversation in CLI mode  |
 
 ## Credits
 Inspired by python version - https://github.com/acheong08/ChatGPT  
