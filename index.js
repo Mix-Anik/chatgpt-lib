@@ -112,6 +112,8 @@ class ChatGPT {
                 'User-Agent': USER_AGENT,
                 'Cookie': `__Secure-next-auth.session-token=${this.config.SessionToken}`
             }
+        }).catch(err => {
+            throw new Error(`Session token fetching has failed: ${err}`);
         });
 
         try {
