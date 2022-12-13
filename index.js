@@ -3,6 +3,11 @@ const axios = require('axios');
 const cliPrompt = require('prompt-sync')();
 
 const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
+const ERROR_MSGS = {
+    401: 'Failed to authenticate using provided SessionToken, it might be expired',
+    default: 'ChatGPT failed to respond. Please try again.'
+}
+
 
 function isValidJson(text) {
     try{
@@ -50,12 +55,19 @@ class ChatGPT {
                 'Content-Type': 'application/json',
             }
         }).catch(err => {
-            if (err.response.status.toString()[0] === '5')
-                return 'ChatGPT failed to respond due to internal error. Please try again.';
+            if (err.response) {
+                if (err.response.status.toString()[0] === '5')
+                    return 'ChatGPT failed to respond due to internal error. Please try again.';
+                if (err.response.status in ERROR_MSGS)
+                    return ERROR_MSGS[err.response.status];
+            }
 
-            console.log(`ERROR: ChatGPT failed to respond due to :${err}`);
+            console.error(`ERROR: ${err}`);
             return 'ChatGPT failed to respond. Possibly because "chatgpt-lib" flow broke, please report to the developer.';
         });
+
+        if (response && (typeof response === 'string' || response instanceof String))
+            return response;
 
         response = response.data.split('\n\n');
         response = response[response.length-3].slice(6);
@@ -64,15 +76,15 @@ class ChatGPT {
             if (isValidJson(response))
                 response = JSON.parse(response);
             else
-                return 'ChatGPT failed to respond. Please try again.';
+                return ERROR_MSGS['default'];
 
             this.parentId = response.message.id;
             this.conversationId = response.conversation_id;
 
             return response.message.content.parts[0];
         } catch (err) {
-            console.log(`ERROR: Could not find or parse actual response text due to: ${err}`);
-            return 'ChatGPT failed to respond. Please try again.';
+            console.error(`ERROR: ${err}`);
+            return ERROR_MSGS['default'];
         }
     }
 
