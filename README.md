@@ -1,3 +1,5 @@
+# ⚠️ Archived on 19-12-2022 ([but why?](https://github.com/Mix-Anik/chatgpt-lib/issues/3#issuecomment-1356921702)) ⚠️
+
 # chatgpt-lib
 ![npm](https://img.shields.io/npm/v/chatgpt-lib)
 ![npm](https://img.shields.io/npm/dw/chatgpt-lib)
